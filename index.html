@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LondryOnline - Layanan Laundry Modern & Terpercaya</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        softbg: '#EBF3FA',
+                        softcard: '#D6E4F0',
+                        brandprimary: '#1E88E5',
+                        branddark: '#0D47A1',
+                        brandhover: '#1565C0',
+                        accentgreen: '#25D366'
+                    },
+                     fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #EBF3FA;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(214, 228, 240, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #EBF3FA;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #90CAF9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800 antialiased relative">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm border-b border-blue-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('new-customer')">
+                    <div class="w-11 h-11 bg-gradient-to-tr from-branddark to-brandprimary rounded-2xl flex items-center justify-center text-white shadow-md shadow-blue-200">
+                        <i class="fa-solid font-bold fa-soap text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-branddark to-brandprimary bg-clip-text text-transparent">LondryOnline</span>
+                        <p class="text-xs text-blue-500 font-medium tracking-wide">Clean, Fresh & Fast</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls (Demo Switcher) -->
+                <nav class="hidden md:flex items-center space-x-2 bg-blue-50/80 p-1.5 rounded-2xl border border-blue-100">
+                    <button id="nav-btn-new-customer" onclick="switchView('new-customer')" class="nav-tab px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-white text-branddark shadow-sm">
+                        <i class="fa-solid fa-user-plus mr-1.5 text-brandprimary"></i> Pelanggan Baru
+                    </button>
+                    <button id="nav-btn-member" onclick="switchView('member')" class="nav-tab px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:text-branddark transition-all duration-200">
+                        <i class="fa-solid fa-user-check mr-1.5 text-blue-400"></i> Pelanggan Lama
+                    </button>
+                    <button id="nav-btn-admin" onclick="switchView('admin')" class="nav-tab px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:text-branddark transition-all duration-200">
+                        <i class="fa-solid fa-user-shield mr-1.5 text-amber-500"></i> Area Admin
+                    </button>
+                </nav>
+
+                <!-- Quick WA Button Top Right -->
+                <div class="hidden sm:flex items-center">
+                    <a href="https://wa.me/082147537988?text=Halo%20LondryOnline,%20saya%20ingin%20konsultasi%20orderan%20banyak/pesan%20khusus" 
+                       target="_blank" 
+                       class="flex items-center space-x-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 shadow-md shadow-emerald-200 hover:shadow-lg">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Order Banyak / Khusus</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-gray-600 hover:text-brandprimary focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-blue-100 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchView('new-customer'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-blue-50 flex items-center">
+                <i class="fa-solid fa-user-plus mr-3 text-brandprimary"></i> Pelanggan Baru (Daftar)
+            </button>
+            <button onclick="switchView('member'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-blue-50 flex items-center">
+                <i class="fa-solid fa-user-check mr-3 text-blue-500"></i> Pelanggan Lama (Login)
+            </button>
+            <button onclick="switchView('admin'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-blue-50 flex items-center">
+                <i class="fa-solid fa-user-shield mr-3 text-amber-500"></i> Area Admin
+            </button>
+            <a href="https://wa.me/6282147537988?text=Halo%20LondryOnline,%20saya%20ingin%20konsultasi%20orderan%20banyak/pesan%20khusus" 
+               class="w-full mt-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center justify-center space-x-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Order Banyak / WA Khusus</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed top-24 right-5 z-50 flex flex-col space-y-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- VIEW 1: PELANGGAN BARU (Daftar & Catalog) -->
+        <section id="view-new-customer" class="view-section space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-branddark via-brandprimary to-blue-500 text-white p-8 sm:p-12 shadow-xl">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase text-blue-100 mb-4 border border-white/20">
+                        <i class="fa-solid fa-gift mr-1 text-amber-300"></i> Diskon Member Baru 20%
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+                        Pakaian Bersih, Wangi & Rapi Tanpa Repot
+                    </h1>
+                    <p class="text-blue-100 text-base sm:text-lg mb-6 leading-relaxed">
+                        Layanan antar-jemput laundry terpercaya. Daftarkan akun Anda sekarang dan nikmati potongan harga khusus transaksi pertama!
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#register-form" class="bg-white text-branddark hover:bg-blue-50 px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all duration-200">
+                            Daftar Sekarang
+                        </a>
+                        <a href="#packages-section" class="bg-branddark/40 hover:bg-branddark/60 text-white border border-white/30 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
+                            Lihat Paket Layanan
+                        </a>
+                    </div>
+                </div>
+                <!-- Decorative Graphic -->
+                <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none text-white hidden md:block">
+                    <i class="fa-solid fa-shirt text-[280px]"></i>
+                </div>
+            </div>
+
+            <!-- Features Info Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl shadow-sm border border-blue-100 flex items-start space-x-4">
+                    <div class="p-3 bg-blue-100 text-brandprimary rounded-xl">
+                        <i class="fa-solid fa-truck-fast text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg mb-1">Gratis Antar-Jemput</h3>
+                        <p class="text-sm text-gray-600">Bebas biaya antar-jemput untuk area kota minimum order 5 kg.</p>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-sm border border-blue-100 flex items-start space-x-4">
+                    <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                        <i class="fa-solid fa-clock text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg mb-1">Pengerjaan Cepat</h3>
+                        <p class="text-sm text-gray-600">Tersedia layanan ekspres selesai dalam waktu 3 hingga 6 jam.</p>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-sm border border-blue-100 flex items-start space-x-4">
+                    <div class="p-3 bg-amber-100 text-amber-600 rounded-xl">
+                        <i class="fa-solid fa-award text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-lg mb-1">Deterjen Eco-Friendly</h3>
+                        <p class="text-sm text-gray-600">Menggunakan sabun ramah lingkungan yang aman untuk serat kain sensitif.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Interactive Section: Packages & Registration -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Services Catalog (8 Cols) -->
+                <div id="packages-section" class="lg:col-span-7 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold text-branddark">Daftar Paket Laundry</h2>
+                            <p class="text-sm text-gray-600">Pilih paket sesuai kebutuhan pakaian Anda</p>
+                        </div>
+                    </div>
+
+                    <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Dynamic Services Loaded Here -->
+                    </div>
+                </div>
+
+                <!-- Registration Form (5 Cols) -->
+                <div id="register-form" class="lg:col-span-5">
+                    <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-lg border border-blue-200 sticky top-28">
+                        <div class="text-center mb-6">
+                            <span class="p-3 bg-blue-100 text-brandprimary rounded-2xl inline-block mb-3">
+                                <i class="fa-solid fa-user-plus text-xl"></i>
+                            </span>
+                            <h2 class="text-2xl font-bold text-branddark">Buat Akun Member Baru</h2>
+                            <p class="text-xs text-gray-500 mt-1">Dapatkan promo khusus dan kemudahan lacak orderan</p>
+                        </div>
+
+                        <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Nama Lengkap</label>
+                                <input type="text" id="reg-name" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary focus:border-transparent outline-none text-sm transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">082147537988</label>
+                                <input type="tel" id="reg-phone" required placeholder="082147537988" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary focus:border-transparent outline-none text-sm transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Email</label>
+                                <input type="email" id="reg-email" required placeholder="budi@example.com" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary focus:border-transparent outline-none text-sm transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Kata Sandi</label>
+                                <input type="password" id="reg-password" required placeholder="******" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary focus:border-transparent outline-none text-sm transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Alamat Penjemputan Lengkap</label>
+                                <textarea id="reg-address" rows="2" required placeholder="Jl. Merdeka No. 123, Kel. Suka Maju..." class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary focus:border-transparent outline-none text-sm transition-all"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-brandprimary hover:bg-brandhover text-white py-3 rounded-xl font-bold text-sm shadow-md transition-all duration-200 mt-2 flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-user-check"></i>
+                                <span>Daftar Akun Baru</span>
+                            </button>
+                        </form>
+                        <p class="text-center text-xs text-gray-500 mt-4">
+                            Sudah punya akun? <a href="javascript:void(0)" onclick="switchView('member')" class="text-brandprimary font-bold hover:underline">Login di sini</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: PELANGGAN LAMA (Login & User Dashboard) -->
+        <section id="view-member" class="view-section space-y-8 hidden">
+            <!-- Login Container (If Not Logged In) -->
+            <div id="member-login-card" class="max-w-md mx-auto my-12 glass-card p-8 rounded-3xl shadow-xl border border-blue-200">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-blue-100 text-brandprimary rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-user-lock text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-branddark">Login Pelanggan Setia</h2>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan email & password akun LondryOnline Anda</p>
+                </div>
+                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Email / WhatsApp</label>
+                        <input type="text" id="login-identifier" required placeholder="Masukkan email / no HP" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Kata Sandi</label>
+                        <input type="password" id="login-password" required placeholder="******" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-brandprimary hover:bg-brandhover text-white py-3 rounded-xl font-bold text-sm shadow-md transition-all">
+                        Masuk Ke Dashboard
+                    </button>
+                </form>
+                <div class="mt-4 p-3 bg-blue-50 rounded-xl text-xs text-gray-600 border border-blue-100 flex items-center justify-between">
+                    <span>💡 Demo Fast Login:</span>
+                    <button onclick="fillDemoUser()" class="text-brandprimary font-bold underline">Gunakan Akun Demo</button>
+                </div>
+            </div>
+
+            <!-- Active Dashboard Content (If Logged In) -->
+            <div id="member-dashboard" class="space-y-8 hidden">
+                <!-- User Welcome Header -->
+                <div class="glass-card p-6 rounded-3xl border border-blue-200 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-brandprimary to-branddark rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                            <span id="user-avatar-initial">U</span>
+                        </div>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-branddark" id="user-welcome-name">Selamat Datang, User!</h2>
+                            <p class="text-xs sm:text-sm text-gray-600 flex items-center gap-2">
+                                <span id="user-phone-display"><i class="fa-solid fa-phone text-blue-400 mr-1"></i> -</span>
+                                <span>•</span>
+                                <span id="user-address-display" class="truncate max-w-xs"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="bg-blue-100/80 px-4 py-2 rounded-2xl border border-blue-200 text-center flex-1 md:flex-initial">
+                            <p class="text-xs text-gray-500 font-medium">Poin Reward</p>
+                            <p class="text-lg font-bold text-brandprimary" id="user-points">120 Poin</p>
+                        </div>
+                        <button onclick="handleLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-2xl border border-red-200 text-sm font-semibold transition-all">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Layout Grid (Order Form + Active Status) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Order Quick Form (5 Cols) -->
+                    <div class="lg:col-span-5">
+                        <div class="glass-card p-6 rounded-3xl shadow-md border border-blue-200">
+                            <div class="flex items-center space-x-3 mb-5 border-b border-blue-100 pb-3">
+                                <span class="p-2.5 bg-blue-100 text-brandprimary rounded-xl">
+                                    <i class="fa-solid fa-cart-plus text-lg"></i>
+                                </span>
+                                <div>
+                                    <h3 class="font-bold text-gray-800 text-lg">Buat Pesanan Laundry</h3>
+                                    <p class="text-xs text-gray-500">Isi formulir penjemputan cepat</p>
+                                </div>
+                            </div>
+
+                            <form id="form-order" onsubmit="handleCreateOrder(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-700 mb-1">Pilih Paket Layanan</label>
+                                    <select id="order-package" onchange="calculateOrderTotal()" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm bg-white">
+                                        <!-- Options populated dynamically -->
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 mb-1">Estimasi Jumlah</label>
+                                        <div class="relative">
+                                            <input type="number" id="order-quantity" min="1" value="3" oninput="calculateOrderTotal()" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm">
+                                            <span id="unit-label" class="absolute right-3 top-2.5 text-xs text-gray-400 font-semibold">Kg</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 mb-1">Tgl Penjemputan</label>
+                                        <input type="date" id="order-date" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-700 mb-1">Catatan Khusus / Permintaan Parfum</label>
+                                    <textarea id="order-notes" rows="2" placeholder="Contoh: Baju putih dipisah, parfum Lavender..." class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brandprimary outline-none text-sm"></textarea>
+                                </div>
+
+                                <!-- Summary Price Box -->
+                                <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 space-y-2">
+                                    <div class="flex justify-between text-xs text-gray-600">
+                                        <span>Harga Satuan:</span>
+                                        <span id="summary-unit-price" class="font-semibold">Rp 0</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-600">
+                                        <span>Biaya Antar Jemput:</span>
+                                        <span class="font-semibold text-emerald-600">GRATIS</span>
+                                    </div>
+                                    <div class="border-t border-blue-200 pt-2 flex justify-between items-center">
+                                        <span class="font-bold text-gray-800 text-sm">Total Estimasi:</span>
+                                        <span id="summary-total-price" class="font-extrabold text-xl text-brandprimary">Rp 0</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="w-full bg-brandprimary hover:bg-brandhover text-white py-3 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center space-x-2">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    <span>Konfirmasi & Kirim Pesanan</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Order History & Status Tracking (7 Cols) -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-gray-800 text-lg">Riwayat & Status Pesanan Anda</h3>
+                            <button onclick="renderUserOrders()" class="text-xs text-brandprimary font-semibold hover:underline">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> Refresh
+                            </button>
+                        </div>
+
+                        <div id="user-orders-list" class="space-y-4">
+                            <!-- Dynamic user orders render here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: AREA ADMIN (Protected Admin Dashboard) -->
+        <section id="view-admin" class="view-section space-y-8 hidden">
+            <!-- Protected Password Modal / Alert Banner (If Not Authenticated) -->
+            <div id="admin-login-card" class="max-w-md mx-auto my-12 glass-card p-8 rounded-3xl shadow-xl border border-blue-200">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">Admin</h2>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan kata sandi khusus administrator untuk melanjutkan</p>
+                </div>
+                <form id="form-admin-auth" onsubmit="handleAdminAuth(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Password Admin</label>
+                        <input type="password" id="admin-pass-input" admin123 class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-bold text-sm shadow-md transition-all">
+                        Akses Panel Admin
+                    </button>
+                </form>
+                <div class="mt-4 p-3 bg-amber-50 rounded-xl text-xs text-amber-800 border border-amber-200 text-center">
+                    
+                </div>
+            </div>
+
+            <!-- Admin Main Control Panel (If Authenticated) -->
+            <div id="admin-dashboard-content" class="space-y-8 hidden">
+                <!-- Admin Header & Actions -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-blue-100 shadow-sm">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Administrator Verified
+                        </span>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-2">Dashboard Pengelolaan Laundry</h2>
+                        <p class="text-xs text-gray-500">Kelola pesanan pelanggan, ubah status, dan kelola tarif paket</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="openManagePackagesModal()" class="bg-blue-50 hover:bg-blue-100 text-brandprimary border border-blue-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-tags"></i> Kelola Harga Paket
+                        </button>
+                        <button onclick="handleAdminLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-lock"></i> Keluar Admin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Statistics Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="glass-card p-5 rounded-2xl border border-blue-100 flex items-center space-x-4">
+                        <div class="p-3 bg-blue-100 text-brandprimary rounded-xl">
+                            <i class="fa-solid fa-boxes-packing text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Total Pesanan</p>
+                            <h4 id="stat-total-orders" class="text-xl font-extrabold text-gray-800">0</h4>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-blue-100 flex items-center space-x-4">
+                        <div class="p-3 bg-amber-100 text-amber-600 rounded-xl">
+                            <i class="fa-solid fa-rotate text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Dalam Proses</p>
+                            <h4 id="stat-pending-orders" class="text-xl font-extrabold text-gray-800">0</h4>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-blue-100 flex items-center space-x-4">
+                        <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                            <i class="fa-solid fa-sack-dollar text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Total Omset</p>
+                            <h4 id="stat-revenue" class="text-xl font-extrabold text-gray-800">Rp 0</h4>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border border-blue-100 flex items-center space-x-4">
+                        <div class="p-3 bg-purple-100 text-purple-600 rounded-xl">
+                            <i class="fa-solid fa-users text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Pelanggan</p>
+                            <h4 id="stat-total-users" class="text-xl font-extrabold text-gray-800">0</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Orders Table -->
+                <div class="glass-card rounded-3xl border border-blue-200 overflow-hidden shadow-sm">
+                    <div class="p-6 border-b border-blue-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">Daftar Semua Pesanan Masuk</h3>
+                            <p class="text-xs text-gray-500">Ubah status laundry dan hubungi pelanggan via WhatsApp</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="admin-search" oninput="renderAdminOrders()" placeholder="Cari nama/order ID..." class="px-3.5 py-1.5 text-xs rounded-xl border border-gray-300 outline-none focus:ring-2 focus:ring-brandprimary">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-blue-50/70 text-gray-600 text-xs font-semibold uppercase tracking-wider">
+                                    <th class="p-4">ID / Tanggal</th>
+                                    <th class="p-4">Pelanggan & Kontak</th>
+                                    <th class="p-4">Layanan & Berat</th>
+                                    <th class="p-4">Total Biaya</th>
+                                    <th class="p-4">Status Saat Ini</th>
+                                    <th class="p-4 text-center">Aksi & Kontak</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-orders-table-body" class="divide-y divide-blue-50 text-xs">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating WhatsApp Action Button (FAB) -->
+    <a href="https://wa.me/6281234567890?text=Halo%20LondryOnline,%20saya%20mau%20tanya%20orderan%20jumlah%20banyak/pesan%20khusus..." 
+       target="_blank" 
+       title="Hubungi Admin WhatsApp"
+       class="fixed bottom-6 right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 group">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+        <!-- Tooltip on Hover -->
+        <span class="absolute right-16 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">
+            Chat WhatsApp Admin
+        </span>
+    </a>
+
+    <!-- Package Management Modal (Admin) -->
+    <div id="modal-packages" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-bold text-gray-800 text-lg">Pengaturan Tarif Paket Laundry</h3>
+                <button onclick="closeManagePackagesModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div id="packages-edit-list" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+                <!-- Package price edit fields loaded dynamically -->
+            </div>
+            <div class="pt-2 flex justify-end">
+                <button onclick="closeManagePackagesModal()" class="bg-brandprimary text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow">
+                    Selesai & Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-blue-100 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
+            <div class="flex justify-center items-center space-x-2 text-branddark font-bold text-sm">
+                <i class="fa-solid fa-soap text-brandprimary"></i>
+                <span>LondryOnline System</span>
+            </div>
+            <p>Solusi Laundry Antar-Jemput Praktis, Cepat, dan Higienis.</p>
+            <p class="text-gray-400">© 2026 LondryOnline Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Default Data Initialization
+        const DEFAULT_PACKAGES = [
+            { id: 'p1', name: 'Cuci Komplit (Cuci+Setrika)', price: 7000, unit: 'kg', icon: 'fa-shirt', desc: 'Selesai 1-2 hari, rapi, harum & lipat rapi' },
+            { id: 'p2', name: 'Cuci Kering Saja', price: 5000, unit: 'kg', icon: 'fa-wind', desc: 'Proses cuci & kering mesin tanpa setrika' },
+            { id: 'p3', name: 'Setrika Rapi Saja', price: 4500, unit: 'kg', icon: 'fa-jug-detergent', desc: 'Pakaian disetrika licin & wangi' },
+            { id: 'p4', name: 'Express Super 3 Jam', price: 15000, unit: 'kg', icon: 'fa-bolt', desc: 'Prioritas utama, langsung selesai 3 jam' },
+            { id: 'p5', name: 'Dry Cleaning / Jas / Gaun', price: 25000, unit: 'pcs', icon: 'fa-vest', desc: 'Perawatan khusus pakaian berbahan sensitif' },
+            { id: 'p6', name: 'Cuci Bedcover & Karpet', price: 35000, unit: 'pcs', icon: 'fa-rug', desc: 'Pembersihan mendalam dari kuman & debu' }
+        ];
+
+        const INITIAL_ORDERS = [
+            {
+                id: 'ORD-8921',
+                userName: 'Anisa Rahma',
+                userPhone: '081298765432',
+                userAddress: 'Jl. Melati No. 45, Komplek Permai',
+                packageName: 'Cuci Komplit (Cuci+Setrika)',
+                packagePrice: 7000,
+                unit: 'kg',
+                quantity: 4,
+                total: 28000,
+                pickupDate: '2026-10-04',
+                notes: 'Parfum Lavender, jangan campur baju hitam',
+                status: 'Sedang Dicuci',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'ORD-8920',
+                userName: 'Budi Santoso',
+                userPhone: '081234567890',
+                userAddress: 'Jl. Merdeka No. 123',
+                packageName: 'Express Super 3 Jam',
+                packagePrice: 15000,
+                unit: 'kg',
+                quantity: 3,
+                total: 45000,
+                pickupDate: '2026-10-04',
+                notes: 'Baju kemeja dikepit hanger',
+                status: 'Siap Diantar',
+                createdAt: new Date(Date.now() - 3600000 * 5).toISOString()
+            }
+        ];
+
+        // State Storage Helpers
+        function getPackages() {
+            const data = localStorage.getItem('laundry_packages');
+            return data ? JSON.parse(data) : DEFAULT_PACKAGES;
+        }
+
+        function savePackages(packages) {
+            localStorage.setItem('laundry_packages', JSON.stringify(packages));
+        }
+
+        function getOrders() {
+            const data = localStorage.getItem('laundry_orders');
+            return data ? JSON.parse(data) : INITIAL_ORDERS;
+        }
+
+        function saveOrders(orders) {
+            localStorage.setItem('laundry_orders', JSON.stringify(orders));
+        }
+
+        function getCurrentUser() {
+            const data = localStorage.getItem('laundry_logged_user');
+            return data ? JSON.parse(data) : null;
+        }
+
+        function saveCurrentUser(user) {
+            localStorage.setItem('laundry_logged_user', JSON.stringify(user));
+        }
+
+        function isAdminLoggedIn() {
+            return localStorage.getItem('laundry_admin_auth') === 'true';
+        }
+
+        // UI Navigation Switcher
+        function switchView(viewName) {
+            // Update Active Buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-branddark', 'shadow-sm');
+                btn.classList.add('text-gray-600');
+            });
+
+            const activeBtn = document.getElementById(`nav-btn-${viewName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-branddark', 'shadow-sm');
+                activeBtn.classList.remove('text-gray-600');
+            }
+
+            // Hide All Sections
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+
+            // View Protection Checks
+            if (viewName === 'admin') {
+                document.getElementById('view-admin').classList.remove('hidden');
+                if (isAdminLoggedIn()) {
+                    document.getElementById('admin-login-card').classList.add('hidden');
+                    document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                    renderAdminDashboard();
+                } else {
+                    document.getElementById('admin-login-card').classList.remove('hidden');
+                    document.getElementById('admin-dashboard-content').classList.add('hidden');
+                }
+            } else if (viewName === 'member') {
+                document.getElementById('view-member').classList.remove('hidden');
+                const user = getCurrentUser();
+                if (user) {
+                    document.getElementById('member-login-card').classList.add('hidden');
+                    document.getElementById('member-dashboard').classList.remove('hidden');
+                    renderUserDashboard();
+                } else {
+                    document.getElementById('member-login-card').classList.remove('hidden');
+                    document.getElementById('member-dashboard').classList.add('hidden');
+                }
+            } else {
+                document.getElementById('view-new-customer').classList.remove('hidden');
+                renderServicesCatalog();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgBg = 'bg-gray-800';
+            let icon = 'fa-info-circle';
+            
+            if (type === 'success') {
+                bgBg = 'bg-emerald-600';
+                icon = 'fa-circle-check';
+            } else if (type === 'error') {
+                bgBg = 'bg-rose-600';
+                icon = 'fa-triangle-exclamation';
+            } else if (type === 'warning') {
+                bgBg = 'bg-amber-600';
+                icon = 'fa-bell';
+            }
+
+            toast.className = `${bgBg} text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 pointer-events-auto transform transition-all duration-300 opacity-0 translate-y-2 text-xs sm:text-sm font-medium`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-lg"></i>
+                <span class="flex-1">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+            }, 10);
+
+            // Animate Out
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Render Service Packages Cards
+        function renderServicesCatalog() {
+            const container = document.getElementById('services-grid');
+            const packages = getPackages();
+            container.innerHTML = '';
+
+            packages.forEach(pkg => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-5 rounded-2xl border border-blue-100 flex flex-col justify-between hover:shadow-md transition-all';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="p-2.5 bg-blue-100 text-brandprimary rounded-xl">
+                                <i class="fa-solid ${pkg.icon} text-xl"></i>
+                            </span>
+                            <span class="text-xs font-bold text-branddark bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
+                                Rp ${pkg.price.toLocaleString('id-ID')} / ${pkg.unit}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-base mb-1">${pkg.name}</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed mb-4">${pkg.desc}</p>
+                    </div>
+                    <button onclick="selectPackageToOrder('${pkg.id}')" class="w-full bg-blue-50 hover:bg-brandprimary hover:text-white text-brandprimary font-semibold text-xs py-2 rounded-xl border border-blue-200 transition-all">
+                        Pilih & Pesan Sekarang
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Handle Customer Registration
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const address = document.getElementById('reg-address').value.trim();
+
+            const newUser = {
+                name,
+                phone,
+                email,
+                password,
+                address,
+                points: 50 // New member bonus points
+            };
+
+            saveCurrentUser(newUser);
+            showToast('Pendaftaran Berhasil! Selamat datang di LondryOnline.', 'success');
+            document.getElementById('form-register').reset();
+            switchView('member');
+        }
+
+        function fillDemoUser() {
+            document.getElementById('login-identifier').value = 'budi@example.com';
+            document.getElementById('login-password').value = '123456';
+        }
+
+        // Handle Customer Login
+        function handleLogin(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            // Simplified Login Check
+            let user = getCurrentUser();
+            if (!user || (user.email !== identifier && user.phone !== identifier)) {
+                // Fallback Demo User
+                user = {
+                    name: 'Budi Santoso',
+                    phone: '081234567890',
+                    email: 'budi@example.com',
+                    address: 'Jl. Merdeka No. 123, Kel. Suka Maju',
+                    points: 120
+                };
+                saveCurrentUser(user);
+            }
+
+            showToast(`Berhasil login! Selamat datang ${user.name}.`, 'success');
+            switchView('member');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('laundry_logged_user');
+            showToast('Anda telah keluar dari akun.', 'info');
+            switchView('member');
+        }
+
+        // Render Logged User Dashboard
+        function renderUserDashboard() {
+            const user = getCurrentUser();
+            if (!user) return;
+
+            document.getElementById('user-welcome-name').textContent = `Selamat Datang, ${user.name}!`;
+            document.getElementById('user-avatar-initial').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('user-phone-display').innerHTML = `<i class="fa-solid fa-phone text-blue-400 mr-1"></i> ${user.phone}`;
+            document.getElementById('user-address-display').textContent = user.address;
+            document.getElementById('user-points').textContent = `${user.points || 0} Poin`;
+
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('order-date').value = today;
+
+            populatePackageSelect();
+            renderUserOrders();
+        }
+
+        function populatePackageSelect() {
+            const select = document.getElementById('order-package');
+            const packages = getPackages();
+            select.innerHTML = '';
+
+            packages.forEach(pkg => {
+                const opt = document.createElement('option');
+                opt.value = pkg.id;
+                opt.textContent = `${pkg.name} - Rp ${pkg.price.toLocaleString('id-ID')}/${pkg.unit}`;
+                select.appendChild(opt);
+            });
+
+            calculateOrderTotal();
+        }
+
+        function calculateOrderTotal() {
+            const pkgId = document.getElementById('order-package').value;
+            const qty = parseFloat(document.getElementById('order-quantity').value) || 1;
+            const packages = getPackages();
+            const selectedPkg = packages.find(p => p.id === pkgId) || packages[0];
+
+            if (selectedPkg) {
+                document.getElementById('unit-label').textContent = selectedPkg.unit.toUpperCase();
+                document.getElementById('summary-unit-price').textContent = `Rp ${selectedPkg.price.toLocaleString('id-ID')} / ${selectedPkg.unit}`;
+                
+                const total = selectedPkg.price * qty;
+                document.getElementById('summary-total-price').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            }
+        }
+
+        function selectPackageToOrder(packageId) {
+            switchView('member');
+            const select = document.getElementById('order-package');
+            if (select) {
+                select.value = packageId;
+                calculateOrderTotal();
+            }
+        }
+
+        // Handle Order Creation
+        function handleCreateOrder(e) {
+            e.preventDefault();
+            const user = getCurrentUser();
+            if (!user) {
+                showToast('Silakan login terlebih dahulu!', 'warning');
+                return;
+            }
+
+            const pkgId = document.getElementById('order-package').value;
+            const packages = getPackages();
+            const pkg = packages.find(p => p.id === pkgId);
+            const qty = parseFloat(document.getElementById('order-quantity').value) || 1;
+            const date = document.getElementById('order-date').value;
+            const notes = document.getElementById('order-notes').value.trim();
+
+            const newOrder = {
+                id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                userName: user.name,
+                userPhone: user.phone,
+                userAddress: user.address,
+                packageName: pkg.name,
+                packagePrice: pkg.price,
+                unit: pkg.unit,
+                quantity: qty,
+                total: pkg.price * qty,
+                pickupDate: date,
+                notes: notes || 'Tidak ada catatan khusus',
+                status: 'Diterima',
+                createdAt: new Date().toISOString()
+            };
+
+            const orders = getOrders();
+            orders.unshift(newOrder);
+            saveOrders(orders);
+
+            // Add points
+            user.points = (user.points || 0) + 10;
+            saveCurrentUser(user);
+
+            showToast('Pesanan laundry Anda berhasil dibuat!', 'success');
+            document.getElementById('order-notes').value = '';
+            renderUserDashboard();
+        }
+
+        // Render User Orders List
+        function renderUserOrders() {
+            const user = getCurrentUser();
+            const orders = getOrders().filter(o => o.userName === user.name || o.userPhone === user.phone);
+            const container = document.getElementById('user-orders-list');
+            container.innerHTML = '';
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card p-8 rounded-2xl text-center text-gray-500 border border-blue-100">
+                        <i class="fa-solid fa-basket-shopping text-4xl text-blue-200 mb-2"></i>
+                        <p class="text-sm font-semibold">Belum Ada Pesanan Aktiv</p>
+                        <p class="text-xs text-gray-400 mt-1">Buat pesanan pertama Anda menggunakan form di sebelah kiri.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            orders.forEach(order => {
+                let badgeColor = 'bg-blue-100 text-blue-800';
+                if (order.status === 'Sedang Dicuci') badgeColor = 'bg-amber-100 text-amber-800';
+                if (order.status === 'Sedang Di-setrika') badgeColor = 'bg-purple-100 text-purple-800';
+                if (order.status === 'Siap Diantar' || order.status === 'Selesai') badgeColor = 'bg-emerald-100 text-emerald-800';
+
+                const card = document.createElement('div');
+                card.className = 'glass-card p-5 rounded-2xl border border-blue-100 space-y-3';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-blue-50 pb-2">
+                        <div>
+                            <span class="font-bold text-branddark text-sm">${order.id}</span>
+                            <span class="text-xs text-gray-400 ml-2">${new Date(order.createdAt).toLocaleDateString('id-ID')}</span>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${badgeColor}">
+                            ${order.status}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <span class="text-gray-400 block">Paket Layanan:</span>
+                            <span class="font-semibold text-gray-700">${order.packageName}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Jumlah / Berat:</span>
+                            <span class="font-semibold text-gray-700">${order.quantity} ${order.unit}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Tgl Penjemputan:</span>
+                            <span class="font-semibold text-gray-700">${order.pickupDate}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Total Biaya:</span>
+                            <span class="font-bold text-brandprimary">Rp ${order.total.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                    ${order.notes ? `<div class="text-xs bg-blue-50 p-2 rounded-xl text-gray-600 border border-blue-100">
+                        <strong>Catatan:</strong> ${order.notes}
+                    </div>` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Admin Auth
+        function handleAdminAuth(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'admin123') {
+                localStorage.setItem('laundry_admin_auth', 'true');
+                showToast('Akses Admin Diberikan!', 'success');
+                switchView('admin');
+            } else {
+                showToast('Kata sandi admin salah!', 'error');
+            }
+        }
+
+        function handleAdminLogout() {
+            localStorage.removeItem('laundry_admin_auth');
+            showToast('Keluar dari panel admin.', 'info');
+            switchView('admin');
+        }
+
+        // Admin Dashboard Renders
+        function renderAdminDashboard() {
+            const orders = getOrders();
+            const packages = getPackages();
+
+            // Stats
+            document.getElementById('stat-total-orders').textContent = orders.length;
+            const pending = orders.filter(o => o.status !== 'Selesai' && o.status !== 'Siap Diantar').length;
+            document.getElementById('stat-pending-orders').textContent = pending;
+            
+            const revenue = orders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('stat-revenue').textContent = `Rp ${revenue.toLocaleString('id-ID')}`;
+
+            // Unique Customers Count
+            const uniqueUsers = new Set(orders.map(o => o.userPhone)).size;
+            document.getElementById('stat-total-users').textContent = uniqueUsers || 1;
+
+            renderAdminOrders();
+        }
+
+        function renderAdminOrders() {
+            const orders = getOrders();
+            const search = (document.getElementById('admin-search')?.value || '').toLowerCase();
+            const tbody = document.getElementById('admin-orders-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = orders.filter(o => 
+                o.id.toLowerCase().includes(search) || 
+                o.userName.toLowerCase().includes(search) ||
+                o.userPhone.includes(search)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center p-6 text-gray-400">Tidak ada data pesanan ditemukan.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-blue-50/50 transition-colors';
+
+                const encodedMessage = encodeURIComponent(`Halo ${order.userName}, menginfokan status pesanan laundry Anda (${order.id}) saat ini: ${order.status}. Terima kasih!`);
+                const waLink = `https://wa.me/${order.userPhone.replace(/^0/, '62')}?text=${encodedMessage}`;
+
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <span class="font-bold text-gray-800 block">${order.id}</span>
+                        <span class="text-[10px] text-gray-400">${new Date(order.createdAt).toLocaleDateString('id-ID')}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-semibold text-gray-800 block">${order.userName}</span>
+                        <span class="text-gray-500">${order.userPhone}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-medium text-gray-800 block">${order.packageName}</span>
+                        <span class="text-gray-500">${order.quantity} ${order.unit}</span>
+                    </td>
+                    <td class="p-4 font-bold text-brandprimary">
+                        Rp ${order.total.toLocaleString('id-ID')}
+                    </td>
+                    <td class="p-4">
+                        <select onchange="updateOrderStatus('${order.id}', this.value)" class="px-2.5 py-1.5 rounded-xl border border-gray-300 text-xs font-semibold focus:ring-2 focus:ring-brandprimary bg-white outline-none">
+                            <option value="Diterima" ${order.status === 'Diterima' ? 'selected' : ''}>Diterima</option>
+                            <option value="Sedang Dicuci" ${order.status === 'Sedang Dicuci' ? 'selected' : ''}>Sedang Dicuci</option>
+                            <option value="Sedang Di-setrika" ${order.status === 'Sedang Di-setrika' ? 'selected' : ''}>Sedang Di-setrika</option>
+                            <option value="Siap Diantar" ${order.status === 'Siap Diantar' ? 'selected' : ''}>Siap Diantar</option>
+                            <option value="Selesai" ${order.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                        </select>
+                    </td>
+                    <td class="p-4 text-center">
+                        <a href="${waLink}" target="_blank" class="inline-flex items-center space-x-1 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm transition-all">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>Chat WA</span>
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const orders = getOrders();
+            const index = orders.findIndex(o => o.id === orderId);
+            if (index !== -1) {
+                orders[index].status = newStatus;
+                saveOrders(orders);
+                showToast(`Status pesanan ${orderId} diubah ke ${newStatus}`, 'success');
+                renderAdminDashboard();
+            }
+        }
+
+        // Package Management Modal
+        function openManagePackagesModal() {
+            const modal = document.getElementById('modal-packages');
+            const list = document.getElementById('packages-edit-list');
+            const packages = getPackages();
+            list.innerHTML = '';
+
+            packages.forEach(pkg => {
+                const item = document.createElement('div');
+                item.className = 'p-3 bg-blue-50/60 rounded-2xl border border-blue-100 flex items-center justify-between gap-3';
+                item.innerHTML = `
+                    <div class="flex-1">
+                        <h5 class="font-bold text-gray-800 text-xs">${pkg.name}</h5>
+                        <span class="text-[10px] text-gray-500">Satuan: /${pkg.unit}</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <span class="text-xs font-semibold text-gray-500">Rp</span>
+                        <input type="number" value="${pkg.price}" onchange="updatePackagePrice('${pkg.id}', this.value)" class="w-24 px-2 py-1 rounded-lg border border-gray-300 text-xs font-bold text-branddark">
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeManagePackagesModal() {
+            document.getElementById('modal-packages').classList.add('hidden');
+            renderServicesCatalog();
+        }
+
+        function updatePackagePrice(pkgId, newPrice) {
+            const packages = getPackages();
+            const pkg = packages.find(p => p.id === pkgId);
+            if (pkg) {
+                pkg.price = parseInt(newPrice) || 0;
+                savePackages(packages);
+                showToast(`Harga paket ${pkg.name} diperbarui!`, 'success');
+            }
+        }
+
+        // On Page Load
+        window.onload = function() {
+            renderServicesCatalog();
+            
+            // Check current URL hash or default to new-customer
+            switchView('new-customer');
+        };
+    </script>
+</body>
+</html>
